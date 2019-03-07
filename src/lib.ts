@@ -36,7 +36,7 @@ Ex. 1 We have a branch with nodes 1,2 and we insert 4
 since (4-2) > (2-1) 4 will go on the right and [1,2] will go on the left
 
 Ex. 2 We have a branch with nodes 1,4 and we insert 3
-since 4<3 we check the distance of |4-3| and |1-3|
+since 4>3 we check the distance of |4-3| and |1-3|
 3 is closer to 4, so [3,4] goes on the right and 1 goes on the left
 
 */
