@@ -1,16 +1,25 @@
 {
-  "name": "smt",
+  "name": "omt.js",
   "version": "1.0.0",
-  "description": "",
+  "description": "Ordered merkle trees with proof of location.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "node node_modules/.bin/mocha ./dist/test"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/es6-promise": "^3.3.0",
     "level": "^4.0.0",
     "levelup": "^4.0.0",
     "sha3": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "typescript": "^3.3.3333"
   }
 }

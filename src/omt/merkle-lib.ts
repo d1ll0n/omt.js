@@ -1,5 +1,5 @@
-import { TreeNode, LeafNode, BranchNode, MembershipProof, ProofNode, ProofNode_Branch } from './types'
-import { distance, min, max, hashOf } from './math'
+import { TreeNode, LeafNode, BranchNode, MembershipProof, ProofNode, ProofNode_Branch } from '../lib/types'
+import { distance, min, max, hashOf } from '../lib/math'
 
 export function insert(root: TreeNode, k: number, v: string) {
   if (root instanceof BranchNode) return branchInsert(root, k, v)
@@ -131,17 +131,13 @@ function getHash(node: ProofNode) {
 }
 
 export function verifyProof(proof: MembershipProof) {
-  console.log(`verifying merkle proof for root hash ${proof.root} with ${proof.siblings.length} siblings`)
-  
   let hash = proof.node.hash
   let min = proof.node.key
   let max = proof.node.key
-  console.log(hash)
   for (let node of proof.siblings) {
     let thisMax = node.key || node.maxKey
     let thisMin = node.key || node.minKey
     let thisHash = getHash(node)
-    console.log(`key: ${node.key} hash: ${thisHash}`)
     let left, right
     if (thisMin > max) {
       left = hash
@@ -159,14 +155,6 @@ export function verifyProof(proof: MembershipProof) {
       maxKey: max,
       minKey: min
     }))
-
-    console.log({
-      left,
-      right,
-      maxKey: max,
-      minKey: min,
-      hash
-    })
   }
-  console.log(hash)
+  return hash == proof.root
 }

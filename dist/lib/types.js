@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var math_1 = require("./math");
-var BranchNode = /** @class */ (function () {
+var BranchNode = (function () {
     function BranchNode(left, right) {
         this.left = left;
         this.right = right;
@@ -17,12 +17,7 @@ var BranchNode = /** @class */ (function () {
     return BranchNode;
 }());
 exports.BranchNode = BranchNode;
-/*
-The hash of the leaf node is the hash of (key, hash(value))
-This allows us to verify locations of leaves when doing merkle proofs
-while only providing values of hashes, rather than the full values
-*/
-var LeafNode = /** @class */ (function () {
+var LeafNode = (function () {
     function LeafNode(k, v) {
         this.key = k;
         this.value = v;
@@ -34,7 +29,7 @@ var LeafNode = /** @class */ (function () {
     return LeafNode;
 }());
 exports.LeafNode = LeafNode;
-var ProofNode_Branch = /** @class */ (function () {
+var ProofNode_Branch = (function () {
     function ProofNode_Branch(node) {
         this.maxKey = node.maxKey;
         this.minKey = node.minKey;
@@ -44,7 +39,7 @@ var ProofNode_Branch = /** @class */ (function () {
     return ProofNode_Branch;
 }());
 exports.ProofNode_Branch = ProofNode_Branch;
-var ProofNode_Leaf = /** @class */ (function () {
+var ProofNode_Leaf = (function () {
     function ProofNode_Leaf(node) {
         this.key = node.key;
         this.hash = math_1.hashOf(node.value);
@@ -52,7 +47,7 @@ var ProofNode_Leaf = /** @class */ (function () {
     return ProofNode_Leaf;
 }());
 exports.ProofNode_Leaf = ProofNode_Leaf;
-var MembershipProof = /** @class */ (function () {
+var MembershipProof = (function () {
     function MembershipProof(node, sibling) {
         this.siblings = [];
         this.node = node;
@@ -60,7 +55,6 @@ var MembershipProof = /** @class */ (function () {
     }
     MembershipProof.prototype.addSibling = function (node) {
         var sibling;
-        // used two ifs instead of a ternary to remove compile warnings
         if (node instanceof BranchNode)
             sibling = new ProofNode_Branch(node);
         if (node instanceof LeafNode)

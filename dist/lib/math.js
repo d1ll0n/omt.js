@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var sha3_1 = require("sha3");
-exports.distance = function (x, y) { return Math.abs(x - y); }; // Math.log(x^y)/Math.LOG2E
+exports.distance = function (x, y) { return Math.abs(x - y); };
 exports.hashOf = function (x) { return new sha3_1.Keccak(256).update(x).digest('hex'); };
 exports.min = function () {
     var args = [];

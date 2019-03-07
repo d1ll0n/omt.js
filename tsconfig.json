@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+      "module": "commonjs",
+      "lib": ["es2017", "dom"],
+      "moduleResolution": "node",
+      "noImplicitAny": false,
+      "removeComments": true,
+      "outDir": "./dist"
+  },
+  "include": [
+      "src/**/*"
+  ],
+  "exclude": [
+      "**/*.spec.ts"
+  ],
+  "typeRoots": ["./node_modules/@types"]
+}

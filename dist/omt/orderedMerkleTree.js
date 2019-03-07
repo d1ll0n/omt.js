@@ -36,36 +36,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var level = require("level");
-var merkle_1 = require("./merkle");
-var types_1 = require("./lib/types");
-var db = level('./h');
-function levelUp() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0: return [4, db.put('h', 'y')];
-                case 1:
-                    _c.sent();
-                    _b = (_a = console).log;
-                    return [4, db.get('h')];
-                case 2:
-                    _b.apply(_a, [_c.sent()]);
-                    return [2];
-            }
+var merkle_lib_1 = require("./merkle-lib");
+var types_1 = require("../lib/types");
+var OrderedMerkleTree = (function () {
+    function OrderedMerkleTree(db) {
+        if (typeof (db) == 'string')
+            this.db = level(db);
+        else
+            this.db = db;
+    }
+    OrderedMerkleTree.prototype.get = function (key) {
+        return this.db.get(key);
+    };
+    OrderedMerkleTree.prototype.proof = function (key) {
+        return merkle_lib_1.membershipProof(this.root, key);
+    };
+    OrderedMerkleTree.prototype.insert = function (key, value) {
+        this.root = !this.root ? new types_1.LeafNode(key, value) : merkle_lib_1.insert(this.root, key, value);
+        return this.db.put(key, value);
+    };
+    OrderedMerkleTree.prototype.insertMany = function (leaves) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _i, leaves_1, leaf;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _i = 0, leaves_1 = leaves;
+                        _a.label = 1;
+                    case 1:
+                        if (!(_i < leaves_1.length)) return [3, 4];
+                        leaf = leaves_1[_i];
+                        return [4, this.insert(leaf.key, leaf.value)];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        _i++;
+                        return [3, 1];
+                    case 4: return [2];
+                }
+            });
         });
-    });
-}
-levelUp();
-var l1 = new types_1.LeafNode(1, 'hello!');
-var l2 = new types_1.LeafNode(4, 'hi!');
-var root = new types_1.BranchNode(l1, l2);
-root = merkle_1.insert(root, 3, 'hello');
-root = merkle_1.insert(root, 5, 'hello');
-root = merkle_1.insert(root, 7, 'hellofriend');
-root = merkle_1.insert(root, 9, 'hellofriend1');
-root = merkle_1.insert(root, 8, 'hellofriend1');
-console.log(root.right.left);
-var proof = merkle_1.membershipProof(root, 5);
-console.log(proof);
-merkle_1.verifyProof(proof);
+    };
+    return OrderedMerkleTree;
+}());
+exports["default"] = OrderedMerkleTree;

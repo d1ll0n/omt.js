@@ -34,38 +34,69 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 exports.__esModule = true;
-var level = require("level");
-var merkle_1 = require("./merkle");
-var types_1 = require("./lib/types");
-var db = level('./h');
-function levelUp() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0: return [4, db.put('h', 'y')];
+require("mocha");
+var chai = require("chai");
+var omt_1 = require("../omt");
+var dbPath1 = './merkledatabase';
+var dbPath2 = './merkledatabase2';
+var defaultLeaves = [
+    {
+        key: 1,
+        value: 'hello world!'
+    },
+    {
+        key: 500,
+        value: 'wow cool tree guy!'
+    },
+    {
+        key: 30,
+        value: 'gee I love cool stuff'
+    },
+    {
+        key: 15,
+        value: '4th time\'s the charm'
+    }
+];
+chai.should();
+describe('merkle proof tester', function () {
+    it('should make some inserts', function () { return __awaiter(_this, void 0, void 0, function () {
+        var omt, value1, value2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    omt = new omt_1.OrderedMerkleTree(dbPath1);
+                    return [4, omt.insertMany(defaultLeaves)];
                 case 1:
-                    _c.sent();
-                    _b = (_a = console).log;
-                    return [4, db.get('h')];
+                    _a.sent();
+                    return [4, omt.get(1)];
                 case 2:
-                    _b.apply(_a, [_c.sent()]);
+                    value1 = _a.sent();
+                    return [4, omt.get(500)];
+                case 3:
+                    value2 = _a.sent();
+                    chai.expect(value1).to.eql('hello world!');
+                    chai.expect(value2).to.eql('wow cool tree guy!');
                     return [2];
             }
         });
-    });
-}
-levelUp();
-var l1 = new types_1.LeafNode(1, 'hello!');
-var l2 = new types_1.LeafNode(4, 'hi!');
-var root = new types_1.BranchNode(l1, l2);
-root = merkle_1.insert(root, 3, 'hello');
-root = merkle_1.insert(root, 5, 'hello');
-root = merkle_1.insert(root, 7, 'hellofriend');
-root = merkle_1.insert(root, 9, 'hellofriend1');
-root = merkle_1.insert(root, 8, 'hellofriend1');
-console.log(root.right.left);
-var proof = merkle_1.membershipProof(root, 5);
-console.log(proof);
-merkle_1.verifyProof(proof);
+    }); });
+    it('should prove an entry', function () { return __awaiter(_this, void 0, void 0, function () {
+        var omt, proof1, proof2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    omt = new omt_1.OrderedMerkleTree(dbPath2);
+                    return [4, omt.insertMany(defaultLeaves)];
+                case 1:
+                    _a.sent();
+                    proof1 = omt_1.verifyProof(omt.proof(30));
+                    proof2 = omt_1.verifyProof(omt.proof(15));
+                    chai.expect(proof1).to.eql(true);
+                    chai.expect(proof2).to.eql(true);
+                    return [2];
+            }
+        });
+    }); });
+});
