@@ -39,10 +39,6 @@ Ex. 2 We have a branch with nodes 1,4 and we insert 3
 since 4<3 we check the distance of |4-3| and |1-3|
 3 is closer to 4, so [3,4] goes on the right and 1 goes on the left
 
-Ex. 3 We have a branch with nodes [[1,2], [5,8]] and we insert 3
-4 is equidistant from 3 and 5, so it goes on the left
-
-
 */
 function branchInsert(root: BranchNode, k: number, v: string): BranchNode {
   let left = root.left;
