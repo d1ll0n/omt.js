@@ -5,7 +5,8 @@
   "main": "dist/omt/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "node node_modules/.bin/mocha ./dist/test"
+    "test": "node node_modules/.bin/mocha ./dist/test",
+    "prebuild": "rm -rf dist"
   },
   "author": "Dillon Kellar",
   "license": "GPL-3.0-only",
