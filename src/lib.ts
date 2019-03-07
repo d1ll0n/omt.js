@@ -1,18 +1,6 @@
 import { TreeNode, LeafNode, BranchNode, MembershipProof, ProofNode, ProofNode_Branch } from './types'
 import { distance, min, max, hashOf } from './math'
 
-export const nodeDistance = (y: number, root: TreeNode): number => {
-  return distance(y, (root.maxKey || root.key))
-}
-
-export const minKey = (x: TreeNode, y: TreeNode): number => {
-  return min((x.maxKey || x.key), (y.maxKey || y.key))
-}
-
-export const maxKey = (x: TreeNode, y: TreeNode): number => {
-  return max((x.maxKey || x.key), (y.maxKey || y.key))
-}
-
 export function insert(root: TreeNode, k: number, v: string) {
   if (root instanceof BranchNode) return branchInsert(root, k, v)
   else return leafInsert(root, k, v)
