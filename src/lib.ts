@@ -26,16 +26,7 @@ function leafInsert(leaf: TreeNode, k: number, v: string): BranchNode {
   return new BranchNode(newLeaf, leaf)
 }
 
-/* 
-We want to minimize the travel path for nodes in the tree,
-so when inserting a new key, if the key is greater than
-the old maximum or less than the old minimum, we check
-if the distance between the old maximum of the left side
-and the old minimum of the right side is greater than the
-distance between the old maximum or minimum and the new key
-If the distance is greater, we create a new branch at that level
-with the old root branch on the left or right side of the new entry
-
+/*
 If a key is within the range of a branch, it will be inserted into that branch
 If it is outside the range of the branch, it will either be inserted into the branch
 on the right or into the current level depending on the relative distances between the
