@@ -7,8 +7,8 @@
     "build": "tsc",
     "test": "node node_modules/.bin/mocha ./dist/test"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Dillon Kellar",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "@types/es6-promise": "^3.3.0",
     "level": "^4.0.0",
