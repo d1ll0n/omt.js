@@ -114,7 +114,10 @@ function getHash(node) {
         }));
 }
 function verifyProof(proof) {
-    var hash = proof.node.hash;
+    var hash = math_1.hashOf(JSON.stringify({
+        key: proof.node.key,
+        hash: math_1.hashOf(proof.node.value)
+    }));
     var min = proof.node.key;
     var max = proof.node.key;
     for (var _i = 0, _a = proof.siblings; _i < _a.length; _i++) {
@@ -145,3 +148,24 @@ function verifyProof(proof) {
     return hash == proof.root;
 }
 exports.verifyProof = verifyProof;
+function updateLeaf(root, k, v) {
+    var left = root.left;
+    var right = root.right;
+    if (left instanceof types_1.LeafNode && left.key == k) {
+        var newLeaf = new types_1.LeafNode(k, v);
+        return new types_1.BranchNode(newLeaf, right);
+    }
+    else if (right instanceof types_1.LeafNode && right.key == k) {
+        var newLeaf = new types_1.LeafNode(k, v);
+        return new types_1.BranchNode(left, newLeaf);
+    }
+    else if (k <= (left.maxKey || left.key)) {
+        left = updateLeaf(left, k, v);
+        return new types_1.BranchNode(left, right);
+    }
+    else {
+        right = updateLeaf(right, k, v);
+        return new types_1.BranchNode(left, right);
+    }
+}
+exports.updateLeaf = updateLeaf;

@@ -1,5 +1,5 @@
 import * as level from 'level'
-import { membershipProof, insert } from './merkle-lib'
+import { membershipProof, insert, updateLeaf } from './merkle-lib'
 import { LeafNode, TreeNode } from '../lib/types'
 
 export default class OrderedMerkleTree {
@@ -21,6 +21,11 @@ export default class OrderedMerkleTree {
 
   insert(key: number, value: string) {
     this.root = !this.root ? new LeafNode(key, value) : insert(this.root, key, value)
+    return this.db.put(key, value)
+  }
+
+  update(key: number, value: string) {
+    this.root = updateLeaf(this.root, key, value)
     return this.db.put(key, value)
   }
 

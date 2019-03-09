@@ -1,8 +1,13 @@
 {
   "name": "omt.js",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Ordered merkle trees with proof of location.",
   "main": "dist/omt/index.js",
+  "homepage": "https://github.com/d1ll0n/omt.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d1ll0n/omt.js"
+  },
   "scripts": {
     "build": "tsc",
     "test": "node node_modules/.bin/mocha ./dist/test",

@@ -39,8 +39,9 @@ exports.__esModule = true;
 require("mocha");
 var chai = require("chai");
 var omt_1 = require("../omt");
-var dbPath1 = './merkledatabase';
+var dbPath = './merkledatabase';
 var dbPath2 = './merkledatabase2';
+var dbPath3 = './merkledatabase3';
 var defaultLeaves = [
     {
         key: 1,
@@ -66,7 +67,7 @@ describe('merkle proof tester', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    omt = new omt_1.OrderedMerkleTree(dbPath1);
+                    omt = new omt_1.OrderedMerkleTree(dbPath);
                     return [4, omt.insertMany(defaultLeaves)];
                 case 1:
                     _a.sent();
@@ -78,23 +79,71 @@ describe('merkle proof tester', function () {
                     value2 = _a.sent();
                     chai.expect(value1).to.eql('hello world!');
                     chai.expect(value2).to.eql('wow cool tree guy!');
+                    omt.db.close();
                     return [2];
             }
         });
     }); });
     it('should prove an entry', function () { return __awaiter(_this, void 0, void 0, function () {
-        var omt, proof1, proof2;
+        var omt, proof;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    omt = new omt_1.OrderedMerkleTree(dbPath2);
+                    omt = new omt_1.OrderedMerkleTree(dbPath);
                     return [4, omt.insertMany(defaultLeaves)];
                 case 1:
                     _a.sent();
-                    proof1 = omt_1.verifyProof(omt.proof(30));
-                    proof2 = omt_1.verifyProof(omt.proof(15));
-                    chai.expect(proof1).to.eql(true);
-                    chai.expect(proof2).to.eql(true);
+                    proof = omt_1.verifyProof(omt.proof(15));
+                    chai.expect(proof).to.eql(true);
+                    omt.db.close();
+                    return [2];
+            }
+        });
+    }); });
+    it('should update a value', function () { return __awaiter(_this, void 0, void 0, function () {
+        var omt, updated, proof;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    omt = new omt_1.OrderedMerkleTree(dbPath);
+                    return [4, omt.insertMany(defaultLeaves)];
+                case 1:
+                    _a.sent();
+                    return [4, omt.update(30, "hello")];
+                case 2:
+                    _a.sent();
+                    return [4, omt.get(30)];
+                case 3:
+                    updated = _a.sent();
+                    chai.expect(updated).to.eql("hello");
+                    proof = omt.proof(30);
+                    chai.expect(proof.node.value).to.eql('hello');
+                    chai.expect(omt_1.verifyProof(proof)).to.eql(true);
+                    omt.db.close();
+                    return [2];
+            }
+        });
+    }); });
+    it('should falsify a modified proof', function () { return __awaiter(_this, void 0, void 0, function () {
+        var omt, updated, proof;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    omt = new omt_1.OrderedMerkleTree(dbPath);
+                    return [4, omt.insertMany(defaultLeaves)];
+                case 1:
+                    _a.sent();
+                    return [4, omt.update(30, "hello")];
+                case 2:
+                    _a.sent();
+                    return [4, omt.get(30)];
+                case 3:
+                    updated = _a.sent();
+                    chai.expect(updated).to.eql("hello");
+                    proof = omt.proof(30);
+                    proof.node.value = 'bad proof node';
+                    chai.expect(omt_1.verifyProof(proof)).to.eql(false);
+                    omt.db.close();
                     return [2];
             }
         });

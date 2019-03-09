@@ -55,6 +55,10 @@ var OrderedMerkleTree = (function () {
         this.root = !this.root ? new types_1.LeafNode(key, value) : merkle_lib_1.insert(this.root, key, value);
         return this.db.put(key, value);
     };
+    OrderedMerkleTree.prototype.update = function (key, value) {
+        this.root = merkle_lib_1.updateLeaf(this.root, key, value);
+        return this.db.put(key, value);
+    };
     OrderedMerkleTree.prototype.insertMany = function (leaves) {
         return __awaiter(this, void 0, void 0, function () {
             var _i, leaves_1, leaf;

@@ -131,7 +131,10 @@ function getHash(node: ProofNode) {
 }
 
 export function verifyProof(proof: MembershipProof) {
-  let hash = proof.node.hash
+  let hash = hashOf(JSON.stringify({
+    key: proof.node.key,
+    hash: hashOf(proof.node.value)
+  }))
   let min = proof.node.key
   let max = proof.node.key
   for (let node of proof.siblings) {
@@ -157,4 +160,26 @@ export function verifyProof(proof: MembershipProof) {
     }))
   }
   return hash == proof.root
+}
+
+export function updateLeaf(root: TreeNode, k: number, v: string): BranchNode {  
+  let left = root.left;
+  let right = root.right;
+  // check if we are at the node
+  if (left instanceof LeafNode && left.key == k) {
+    let newLeaf = new LeafNode(k, v)
+    return new BranchNode(newLeaf, right)
+  }
+  else if (right instanceof LeafNode && right.key == k) {
+    let newLeaf = new LeafNode(k, v)
+    return new BranchNode(left, newLeaf)
+  }
+  else if (k <= (left.maxKey || left.key)) {
+    left = updateLeaf(left, k, v)
+    return new BranchNode(left, right)
+  }
+  else {
+    right = updateLeaf(right, k, v)
+    return new BranchNode(left, right)
+  }
 }
